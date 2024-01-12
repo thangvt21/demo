@@ -7,6 +7,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import Image from "next/image"
+import { Separator } from "../ui/separator"
 
 const MobileNav = () => {
   return (
@@ -15,14 +16,9 @@ const MobileNav = () => {
         <SheetTrigger className="align-middle">
           <Image src="/assets/icons/menu.svg" width={24} height={24} alt="menu" className="cursor-pointer" />
         </SheetTrigger>
-        <SheetContent>
-          <SheetHeader>
-            <SheetTitle>Are you absolutely sure?</SheetTitle>
-            <SheetDescription>
-              This action cannot be undone. This will permanently delete your account
-              and remove your data from our servers.
-            </SheetDescription>
-          </SheetHeader>
+        <SheetContent className="flex flex-col gap-6 bg-white md:hidden">
+          <Image src={'/assets/images/logo.svg'} width={50} height={50} alt="logo"/>
+          <Separator className="border border-gray-50"/>
         </SheetContent>
       </Sheet>
     </nav>

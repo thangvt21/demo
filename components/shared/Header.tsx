@@ -10,7 +10,7 @@ const Header = () => {
     <header className="w-full border-b">
       <div className="wrapper flex items-center justify-between">
         <Link href="/" className="w-36">
-          <Image src="/assets/images/logo.svg" width={128} height={38} alt="FlashPOD"/>
+          <Image src="/assets/images/logo.svg" width={75} height={75} alt="FlashPOD"/>
         </Link>
 
         <SignedIn>
