@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: 'FlashPOD',
   description: 'Connection app',
   icons: {
-    icon: '/asset/images/logo.svg'
+    icon: '/assets/images/Asset 1.svg'
   }
 }
 

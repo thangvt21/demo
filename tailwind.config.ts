@@ -28,7 +28,9 @@ module.exports = withUt({
         coral: {
           500: '#15BF59',
         },
-
+        valentine: {
+          500: '#D71867'
+        },
         grey: {
           600: '#545454', // Subdued - color name in figma
           500: '#757575',
