@@ -22,14 +22,13 @@ export type CreateProductParams = {
         name: string
         material: string
         variant: string
-        createdAt: Date
-        updateAt: Date
         frontUrl: string
-        backUrl: string
-        productType: string
-        price: string
-        labelUrl: string
+        createdAt: Date
+        updatedAt: Date
         categoryId: string
+        price: string
+        isFree: boolean
+        url: string
     }
     path: string
 }
@@ -39,16 +38,15 @@ export type UpdateProductParams = {
     event: {
         _id: string
         name: string
+        frontUrl: string
         material: string
         variant: string
         createdAt: Date
-        updateAt: Date
-        frontUrl: string
-        backUrl: string
-        productType: string
-        price: string
-        labelUrl: string
+        updatedAt: Date
         categoryId: string
+        price: string
+        isFree: boolean
+        url: string
     }
     path: string
 }
@@ -71,7 +69,7 @@ export type GetEventsByUserParams = {
     page: number
 }
 
-export type GetRelatedProductsByCategoryParams = {
+export type GetRelatedEventsByCategoryParams = {
     categoryId: string
     productId: string
     limit?: number
@@ -82,14 +80,18 @@ export type Product = {
     _id: string
     name: string
     material: string
+    price: string
+    isFree: boolean
+    frontUrl: string
     variant: string
     createdAt: Date
-    updateAt: Date
-    frontUrl: string
-    backUrl: string
-    productType: string
-    price: string
-    labelUrl: string
+    updatedAt: Date
+    url: string
+    organizer: {
+        _id: string
+        firstName: string
+        lastName: string
+    }
     category: {
         _id: string
         name: string
@@ -103,7 +105,7 @@ export type CreateCategoryParams = {
 
 // ====== ORDER PARAMS
 export type CheckoutOrderParams = {
-    eventTitle: string
+    productName: string
     productId: string
     price: string
     isFree: boolean
@@ -119,7 +121,7 @@ export type CreateOrderParams = {
 }
 
 export type GetOrdersByProductParams = {
-    eventId: string
+    productId: string
     searchString: string
 }
 
