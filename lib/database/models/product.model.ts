@@ -1,36 +1,36 @@
-import { Document } from "mongodb";
-import { Schema, model, models } from "mongoose";
+import { Document, Schema, model, models } from "mongoose";
 
 export interface IProduct extends Document {
     _id: string;
     name: string;
-    material: string;
-    variant: string;
+    material?: string;
+    variant?: string;
     createdAt: Date;
-    updateAt: Date;
     frontUrl: string;
-    backUrl: string;
-    productType: string;
-    price?: string;
-    labelUrl?: string;
-    category: {id: String, name:String};
+    updatedAt: Date;
+    backUrl?: string;
+    price: string;
+    isFree: boolean;
+    url?: string;
+    category: { _id: string, name: string }
+    organizer: { _id: string, firstName: string, lastName: string }
 }
 
-
 const ProductSchema = new Schema({
-    name: {type:String, required: true},
-    material: {type:String, required: true},
-    variant: {type:String, required: true},
+    name: { type: String, required: true },
+    material: { type: String },
+    variant: { type: String },
     createdAt: { type: Date, default: Date.now },
-    updateAt: {type: Date},
-    frontUrl: {type: String, required: true},
-    backUrl: {type: String, required:true},
-    productType: {type: String, required: true},
-    price: {type: String},
-    labelUrl: {type: String},
-    category: {type:Schema.Types.ObjectId, ref:'Category'},
+    frontUrl: { type: String, required: true },
+    updatedAt: { type: Date, default: Date.now },
+    backUrl: { type: String },
+    price: { type: String },
+    isFree: { type: Boolean, default: false },
+    url: { type: String },
+    category: { type: Schema.Types.ObjectId, ref: 'Category' },
+    organizer: { type: Schema.Types.ObjectId, ref: 'User' },
 })
 
-const Product = models.Product || model('Product',ProductSchema);
+const Product = models.Product || model('Product', ProductSchema);
 
 export default Product;
