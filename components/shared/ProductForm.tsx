@@ -17,8 +17,15 @@ import { Input } from "@/components/ui/input"
 import { productformSchema } from "@/lib/validator"
 import { productDefaultValues } from "@/constants"
 import Dropdown from "./Dropdown"
-import FileUploader from "./FileUploader"
 import { useState } from "react"
+import { FileUploader } from "./FileUploader"
+import VariantDropdown from "./VariantDropdown"
+import Image from "next/image"
+import { useUploadThing } from "@/lib/uploadthing" 
+import { Console } from "console"
+import Product from "@/lib/database/models/product.model"
+import { useRouter } from "next/navigation"
+import { CreateProduct } from "@/lib/actions/product.action"
 
 type ProductFormProps = {
     userId: string,
@@ -29,6 +36,8 @@ const ProductForm = ({userId, type}: ProductFormProps) => {
     const [files, setFiles] = useState<File[]>([])
 
     const initialValues = productDefaultValues;
+    const router = useRouter();
+    const { startUpload } = useUploadThing('imageUploader')
 
     const form = useForm<z.infer<typeof productformSchema>>({
         resolver: zodResolver(productformSchema),
@@ -36,10 +45,34 @@ const ProductForm = ({userId, type}: ProductFormProps) => {
     })
      
       // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof productformSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof productformSchema>) {
+        let uploadedImageUrl = values.frontUrl;
+
+        if(files.length > 0) {
+            const uploadedImages = await startUpload(files)
+
+            if(!uploadedImages) {
+                return
+            }
+
+            uploadedImageUrl = uploadedImages[0].url
+        }
+
+        if(type === 'Create') {
+            try {
+                const newProduct = await CreateProduct({
+                    product: { ...values, frontUrl: uploadedImageUrl },
+                    userId,
+                    path: '/profile'
+                })
+                if(newProduct) {
+                    form.reset();
+                    router.push(`/products/${newProduct._id}`)
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
     }
 
 
@@ -52,7 +85,7 @@ const ProductForm = ({userId, type}: ProductFormProps) => {
             name="name"
             render={({ field }) => (
                 <FormItem className="w-full">
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Product name</FormLabel>
                 <FormControl>
                     <Input placeholder="Product name" {...field} className="input-field"/>
                 </FormControl>
@@ -62,12 +95,25 @@ const ProductForm = ({userId, type}: ProductFormProps) => {
             />
             <FormField
             control={form.control}
-            name="material"
+            name="categoryId"
             render={({ field }) => (
                 <FormItem className="w-full">
                 <FormLabel>Brand</FormLabel>
                 <FormControl>
                     <Dropdown onChangeHandler={field.onChange} value={field.value}/>
+                </FormControl>
+                <FormMessage />
+                </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name="variantId"
+            render={({ field }) => (
+                <FormItem className="w-full">
+                <FormLabel>Variant</FormLabel>
+                <FormControl>
+                    <VariantDropdown onChangeHandler={field.onChange} value={field.value}/>
                 </FormControl>
                 <FormMessage />
                 </FormItem>
@@ -87,7 +133,33 @@ const ProductForm = ({userId, type}: ProductFormProps) => {
             )}
             />
         </div>
-        <Button type="submit">Submit</Button>
+        <div className="flex flex-col gap-5 md:flex-row">
+            <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                    <FormItem className="w-full">
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                        <div className="flex-center h-[54px] w-full overflow-hidden bg-gray-50 rounded-full px-4 py-2">
+                            <Image src="/assets/icons/dollar.svg" alt="price" width={24} height={24}/>
+                            <Input placeholder="Price" {...field} className="input-field"/>
+                        </div>
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+            />  
+        </div>
+        <Button 
+          type="submit"
+          size="lg"
+          disabled={form.formState.isSubmitting}
+          className="button col-span-2 w-full"
+        >
+          {form.formState.isSubmitting ? (
+            'Submitting...'
+          ): `${type} Product `}</Button>
       </form>
     </Form>
   )

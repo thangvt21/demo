@@ -28,7 +28,7 @@ export const headerLinks = [
 export const productDefaultValues = {
   name: '',
   material: '',
-  variant: '',
+  variantId: '',
   frontUrl: '',
   createdAt: new Date(),
   updatedAt: new Date(),
