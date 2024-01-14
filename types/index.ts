@@ -18,35 +18,29 @@ export type UpdateUserParams = {
 // ====== EVENT PARAMS
 export type CreateProductParams = {
     userId: string
-    event: {
+    product: {
         name: string
-        material: string
-        variant: string
+        variantId: string
         frontUrl: string
         createdAt: Date
         updatedAt: Date
         categoryId: string
         price: string
-        isFree: boolean
-        url: string
     }
     path: string
 }
 
 export type UpdateProductParams = {
     userId: string
-    event: {
+    product: {
         _id: string
         name: string
         frontUrl: string
-        material: string
-        variant: string
+        variantId: string
         createdAt: Date
         updatedAt: Date
         categoryId: string
         price: string
-        isFree: boolean
-        url: string
     }
     path: string
 }
@@ -79,14 +73,14 @@ export type GetRelatedEventsByCategoryParams = {
 export type Product = {
     _id: string
     name: string
-    material: string
     price: string
-    isFree: boolean
     frontUrl: string
-    variant: string
+    variant: {
+        _id: string
+        name: string
+    }
     createdAt: Date
     updatedAt: Date
-    url: string
     organizer: {
         _id: string
         firstName: string
@@ -101,6 +95,10 @@ export type Product = {
 // ====== CATEGORY PARAMS
 export type CreateCategoryParams = {
     categoryName: string
+}
+
+export type CreateVariantParams = {
+    variantName: string
 }
 
 // ====== ORDER PARAMS
