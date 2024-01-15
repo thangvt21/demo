@@ -7,6 +7,7 @@ import React from 'react'
 
 const ProductDetails = async ({params: { id }, searchParams }: SearchParamProps) => {
     const product = await getProductById(id);
+    
 
     const relatedProducts = await getRelatedProductsByCategory({
         categoryId: product.category._id,

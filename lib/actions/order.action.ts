@@ -96,7 +96,7 @@ export async function getOrdersByproduct({ searchString, productId }: GetOrdersB
                     _id: 1,
                     totalAmount: 1,
                     createdAt: 1,
-                    productTitle: '$product.title',
+                    productName: '$product.name',
                     productId: '$product._id',
                     buyer: {
                         $concat: ['$buyer.firstName', ' ', '$buyer.lastName'],
