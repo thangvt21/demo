@@ -16,23 +16,17 @@ export const headerLinks = [
     route: '/pricing',
   },
   {
-    label: 'Blog',
-    route: '/blogs',
-  },
-  {
-    label: 'Helpdesk',
-    route: '/helpdesk',
+    label: 'My Profile',
+    route: '/profile',
   },
 ]
 
 export const productDefaultValues = {
   name: '',
-  material: '',
   variantId: '',
   frontUrl: '',
   createdAt: new Date(),
   updatedAt: new Date(),
   categoryId: '',
   price: '',
-  url: '',
 }

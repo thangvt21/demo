@@ -57,13 +57,13 @@ export type GetAllProductsParams = {
     page: number
 }
 
-export type GetEventsByUserParams = {
+export type GetProductsByUserParams = {
     userId: string
     limit?: number
     page: number
 }
 
-export type GetRelatedEventsByCategoryParams = {
+export type GetRelatedProductsByCategoryParams = {
     categoryId: string
     productId: string
     limit?: number
@@ -106,7 +106,6 @@ export type CheckoutOrderParams = {
     productName: string
     productId: string
     price: string
-    isFree: boolean
     buyerId: string
 }
 

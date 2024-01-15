@@ -37,8 +37,10 @@ type ProductFormProps = {
 const ProductForm = ({userId, type, product, productId}: ProductFormProps) => {
     const [files, setFiles] = useState<File[]>([])
 
-    const initialValues = product && type === "Update" ? {
-        ...product,
+    const initialValues = product && type === 'Update' ? {
+      ...product,
+      createdAt: new Date(product.createdAt),
+      updatedAt: new Date(product.updatedAt),
     } : productDefaultValues;
     const router = useRouter();
     const { startUpload } = useUploadThing('imageUploader')
@@ -77,29 +79,28 @@ const ProductForm = ({userId, type, product, productId}: ProductFormProps) => {
                 console.log(error);
             }
         }
+
         if(type === 'Update') {
-            if(!productId) {
-              router.back()
-              return;
-            }
-      
-            try {
+          if(!productId) {
+            router.back()
+            return;
+          }
+
+          try {
               const updatedProduct = await updateProduct({
                 userId,
                 product: { ...values, frontUrl: uploadedImageUrl, _id: productId },
                 path: `/products/${productId}`
               })
-      
               if(updatedProduct) {
-                form.reset();
-                router.push(`/products/${updatedProduct._id}`)
+                  form.reset();
+                  router.push(`/products/${updatedProduct._id}`)
               }
-            } catch (error) {
+          } catch (error) {
               console.log(error);
-            }
           }
+      }
     }
-
 
   return (
     <Form {...form}>

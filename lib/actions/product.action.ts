@@ -6,7 +6,7 @@ import Product from "../database/models/product.model"
 import User from "../database/models/user.model"
 import Variant from "../database/models/variant.model"
 import { handleError } from "../utils"
-import { CreateProductParams, DeleteProductParams, GetAllProductsParams, UpdateProductParams } from "@/types"
+import { CreateProductParams, DeleteProductParams, GetAllProductsParams, GetProductsByUserParams, GetRelatedProductsByCategoryParams, UpdateProductParams } from "@/types"
 
 const populateProduct = async (query: any) => {
     return query
@@ -80,17 +80,64 @@ export async function updateProduct({ userId, product, path }: UpdateProductPara
 
         const productToUpdate = await Product.findById(product._id)
         if (!productToUpdate || productToUpdate.organizer.toHexString() !== userId) {
-            throw new Error('Unauthorized or product not found')
+            throw new Error('Unauthorized or event not found')
         }
 
         const updatedProduct = await Product.findByIdAndUpdate(
             product._id,
-            { ...product, category: product.categoryId },
+            { ...product, category: product.categoryId, variant: product.variantId },
             { new: true }
         )
         revalidatePath(path)
 
         return JSON.parse(JSON.stringify(updatedProduct))
+    } catch (error) {
+        handleError(error)
+    }
+}
+
+export async function getRelatedProductsByCategory({
+    categoryId,
+    productId,
+    limit = 3,
+    page = 1,
+}: GetRelatedProductsByCategoryParams) {
+    try {
+        await connectToDatabase()
+
+        const skipAmount = (Number(page) - 1) * limit
+        const conditions = { $and: [{ category: categoryId }, { _id: { $ne: productId } }] }
+
+        const productsQuery = Product.find(conditions)
+            .sort({ createdAt: 'desc' })
+            .skip(skipAmount)
+            .limit(limit)
+
+        const products = await populateProduct(productsQuery)
+        const productsCount = await Product.countDocuments(conditions)
+
+        return { data: JSON.parse(JSON.stringify(products)), totalPages: Math.ceil(productsCount / limit) }
+    } catch (error) {
+        handleError(error)
+    }
+}
+
+export async function getProductsByUser({ userId, limit = 6, page }: GetProductsByUserParams) {
+    try {
+        await connectToDatabase()
+
+        const conditions = { organizer: userId }
+        const skipAmount = (page - 1) * limit
+
+        const productsQuery = Product.find(conditions)
+            .sort({ createdAt: 'desc' })
+            .skip(skipAmount)
+            .limit(limit)
+
+        const products = await populateProduct(productsQuery)
+        const productsCount = await Product.countDocuments(conditions)
+
+        return { data: JSON.parse(JSON.stringify(products)), totalPages: Math.ceil(productsCount / limit) }
     } catch (error) {
         handleError(error)
     }
