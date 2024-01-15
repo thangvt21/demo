@@ -15,7 +15,7 @@ const CheckoutButton = ({ product }: { product: IProduct }) => {
   return (
     <div className="flex items-center gap-3">
       {/* {hasproductFinished ? (
-        <p className="p-2 text-red-400">Sorry, tickets are no longer available.</p>
+        <p className="p-2 text-red-400"></p>
       ): ( */}
         <>
           <SignedOut>
