@@ -23,19 +23,23 @@ import VariantDropdown from "./VariantDropdown"
 import Image from "next/image"
 import { useUploadThing } from "@/lib/uploadthing" 
 import { Console } from "console"
-import Product from "@/lib/database/models/product.model"
+import Product, { IProduct } from "@/lib/database/models/product.model"
 import { useRouter } from "next/navigation"
-import { CreateProduct } from "@/lib/actions/product.action"
+import { CreateProduct, updateProduct } from "@/lib/actions/product.action"
 
 type ProductFormProps = {
-    userId: string,
+    userId: string
     type: "Create" | "Update"
+    product?: IProduct,
+    productId?: string
 }
 
-const ProductForm = ({userId, type}: ProductFormProps) => {
+const ProductForm = ({userId, type, product, productId}: ProductFormProps) => {
     const [files, setFiles] = useState<File[]>([])
 
-    const initialValues = productDefaultValues;
+    const initialValues = product && type === "Update" ? {
+        ...product,
+    } : productDefaultValues;
     const router = useRouter();
     const { startUpload } = useUploadThing('imageUploader')
 
@@ -73,6 +77,27 @@ const ProductForm = ({userId, type}: ProductFormProps) => {
                 console.log(error);
             }
         }
+        if(type === 'Update') {
+            if(!productId) {
+              router.back()
+              return;
+            }
+      
+            try {
+              const updatedProduct = await updateProduct({
+                userId,
+                product: { ...values, frontUrl: uploadedImageUrl, _id: productId },
+                path: `/products/${productId}`
+              })
+      
+              if(updatedProduct) {
+                form.reset();
+                router.push(`/products/${updatedProduct._id}`)
+              }
+            } catch (error) {
+              console.log(error);
+            }
+          }
     }
 
 
