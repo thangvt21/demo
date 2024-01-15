@@ -1,8 +1,19 @@
+import Collection from '@/components/shared/Collection'
 import { Button } from '@/components/ui/button'
+import { getAllProducts } from '@/lib/actions/product.action';
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function Home() {
+export default async function Home() {
+  const products = await getAllProducts({
+    query: '',
+    category: '',
+    page: 1,
+    limit: 6,
+  });
+
+  console.log(products)
+
   return (
     <>
       <section className='bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10'>
@@ -43,6 +54,16 @@ export default function Home() {
           Category
           Filter
         </div>
+
+        <Collection 
+          data={products?.data}
+          emptyTitle = "No Products Found"
+          emptyStateSubtext = "Come back later"
+          collectionType = "All_products"
+          limit={6}
+          page={1}
+          totalPages={2}
+        />
       </section>
     </>
   )
