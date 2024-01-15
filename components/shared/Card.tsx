@@ -20,7 +20,7 @@ const Card = ( {product, hasOrderLink, hidePrice}: CardProps) => {
 
   return (
     <div className='group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg md:min-h-[438px]'>
-        <Link href={`/product/${product._id}`} style={{backgroundImage: `url(${product.frontUrl})`}} className='flex-center flex-grow bg-grey-50 bg-cover bg-center text-grey-500'/>
+        <Link href={`/products/${product._id}`} style={{backgroundImage: `url(${product.frontUrl})`}} className='flex-center flex-grow bg-grey-50 bg-cover bg-center text-grey-500'/>
         {isProductCreator && !hidePrice && (
             <div className='absolute right-2 top-2 flex flex-col gap-4 rounded-xl shadow-sm p-3 bg-white transition-all'>
                 <Link href={`/products/${product._id}/update`}>
@@ -29,7 +29,7 @@ const Card = ( {product, hasOrderLink, hidePrice}: CardProps) => {
                 <DeleteConfirmation productId={product._id}/>
             </div>
         )}
-        <Link href={`/product/${product._id}`} className='flex min-h-[128px] flex-col gap-3 p-5 md:gap-4'>          
+        <Link href={`/products/${product._id}`} className='flex min-h-[128px] flex-col gap-3 p-5 md:gap-4'>          
             {!hidePrice && 
             <>
                 <div className='p-medium-16 md:p-medium-20 line-clamp-2 flex-1 text-black'>{product.name}</div>
