@@ -16,12 +16,8 @@ export const headerLinks = [
     route: '/pricing',
   },
   {
-    label: 'Blog',
-    route: '/blogs',
-  },
-  {
-    label: 'Helpdesk',
-    route: '/helpdesk',
+    label: 'My Profile',
+    route: '/profile',
   },
 ]
 

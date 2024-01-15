@@ -10,7 +10,7 @@ type CollectionProps = {
     page: number | string,
     totalPages?: number,
     urlParamName?: string,
-    collectionType?: 'Product_Organized' | 'My_Product' | 'All_products'
+    collectionType?: 'Product_Organized' | 'My_Products' | 'All_products'
 }
 
 const Collection = ({
@@ -29,7 +29,7 @@ const Collection = ({
           <ul className='grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:gap-10'>
             {data.map((product) => {
               const hasOrderLink = collectionType === 'Product_Organized';
-              const hidePrice = collectionType === 'My_Product';
+              const hidePrice = collectionType === 'My_Products';
               return (
                 <li key={product.id} className='flex justify-center'>
                   <Card product={product} hasOrderLink={hasOrderLink} hidePrice={hidePrice}/>
