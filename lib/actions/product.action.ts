@@ -80,12 +80,12 @@ export async function updateProduct({ userId, product, path }: UpdateProductPara
 
         const productToUpdate = await Product.findById(product._id)
         if (!productToUpdate || productToUpdate.organizer.toHexString() !== userId) {
-            throw new Error('Unauthorized or product not found')
+            throw new Error('Unauthorized or event not found')
         }
 
         const updatedProduct = await Product.findByIdAndUpdate(
             product._id,
-            { ...product, category: product.categoryId },
+            { ...product, category: product.categoryId, variant: product.variantId },
             { new: true }
         )
         revalidatePath(path)
